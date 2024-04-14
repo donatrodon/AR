@@ -1,10 +1,10 @@
 body {
-    background-color: #0d1117; /* Dark background for the hacker feel */
-    color: #c9d1d9; /* Soft white text color for readability */
-    font-family: 'Courier New', Courier, monospace; /* Monospace font to give the terminal look */
+    background-color: #0d1117;
+    color: #c9d1d9;
+    font-family: 'Courier New', Courier, monospace;
     margin: 0;
     padding: 20px;
-    height: 100vh; /* Full viewport height */
+    height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -16,40 +16,20 @@ h1 {
 }
 
 input, select, textarea, button {
-    width: 90%; /* Full width elements */
-    padding: 10px;
+    width: 90%;
+    padding: 12px;
     margin-bottom: 10px;
     border: none;
     border-radius: 5px;
-    box-sizing: border-box; /* Border and padding included in width/height */
+    box-sizing: border-box;
 }
 
 input, select, textarea {
-    background-color: #161b22; /* Slightly lighter dark shade for input fields */
-    color: #58a6ff; /* Blue color for input text to make it pop */
+    background-color: #161b22;
+    color: #58a6ff;
 }
 
 button {
-    background-color: #238636; /* Green background for the button to stand out */
+    background-color: #238636;
     color: white;
-    font-size: 16px;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #2ea043; /* Slightly lighter green on hover */
-}
-
-#progressContainer {
-    width: 100%; 
-    background-color: #ddd;
-}
-
-#progressBar {
-    width: 0%; 
-    height: 20px; 
-    background-color: #76c043; 
-    text-align: center; 
-    line-height: 20px; 
-    color: white; /* Text color inside the progress bar */
-}
+    font-size: 
