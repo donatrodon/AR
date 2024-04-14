@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
             alert('Please select an image file first!');
             return;
         }
-        recognizeText(imageFile);
+        processImage(imageFile);
     });
 
     function updateProgress(percent) {
@@ -19,24 +19,60 @@ document.addEventListener('DOMContentLoaded', function () {
         progressBar.textContent = `${percent}%`;
     }
 
-    function recognizeText(imageFile) {
+    function processImage(imageFile) {
+        resizeAndProcessImage(imageFile, function(resizedDataUrl) {
+            recognizeText(resizedDataUrl);
+        });
+    }
+
+    function resizeAndProcessImage(file, callback) {
         const reader = new FileReader();
         reader.onload = function(e) {
-            Tesseract.recognize(
-                e.target.result,
-                languageSelect.value,
-                {
-                    logger: m => updateProgress(Math.round(m.progress * 100))
+            const img = new Image();
+            img.onload = function() {
+                let canvas = document.createElement("canvas");
+                let ctx = canvas.getContext("2d");
+                let maxW = 800;
+                let maxH = 600;
+                let width = img.width;
+                let height = img.height;
+
+                if (width > height) {
+                    if (width > maxW) {
+                        height *= maxW / width;
+                        width = maxW;
+                    }
+                } else {
+                    if (height > maxH) {
+                        width *= maxH / height;
+                        height = maxH;
+                    }
                 }
-            ).then(function(result) {
-                output.value = result.data.text;
-                updateProgress(0); // Reset progress after completion
-            }).catch(function(error) {
-                console.error('OCR Error:', error);
-                alert('An error occurred while processing the image!');
-                updateProgress(0); // Reset progress on error
-            });
+
+                canvas.width = width;
+                canvas.height = height;
+                ctx.drawImage(img, 0, 0, width, height);
+                callback(canvas.toDataURL('image/jpeg'));
+            };
+            img.src = e.target.result;
         };
-        reader.readAsDataURL(imageFile);
+        reader.readAsDataURL(file);
+    }
+
+    function recognizeText(dataUrl) {
+        Tesseract.recognize(
+            dataUrl,
+            languageSelect.value,
+            {
+                logger: m => updateProgress(Math.round(m.progress * 100))
+            }
+        ).then(function(result) {
+            output.value = result.data.text;
+            updateProgress(0); // Reset progress after completion
+        }).catch(function(error) {
+            console.error('OCR Error:', error);
+            alert('An error occurred while processing the image!');
+            updateProgress(0); // Reset progress on error
+        });
     }
 });
